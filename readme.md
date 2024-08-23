@@ -1,6 +1,6 @@
 # College ERP System Server
 
-This repository contains the server-side implementation of a College ERP (Enterprise Resource Planning) system. The ERP system is designed to manage and streamline various academic processes within a college, providing dedicated functionalities for admins, students, and teachers.
+This repository contains the server-side implementation of a College ERP system. The ERP system is designed to manage and streamline various academic processes within a college, providing dedicated functionalities for admins, students, and teachers.
 
 ## Features
 

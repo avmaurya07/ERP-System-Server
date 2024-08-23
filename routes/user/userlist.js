@@ -46,8 +46,7 @@ router.post("/userlist", fetchadmin, async (req, res) => {
         .select("-password")
         .select("-date")
         .select("-_id")
-        .select("-__v")
-        .select("-usertype");
+        .select("-__v");
 
       res.json({ msgtype: true, msg: "Teacher User List",userlist});
       addlog(req.adminuser.id,"admin","List of Teachers Accessed","Data Access")

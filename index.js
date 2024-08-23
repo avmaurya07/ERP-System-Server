@@ -21,6 +21,8 @@ app.use("/api/auth", require("./routes/auth/masterlogin"));
 app.use("/api/auth", require("./routes/auth/changepassword"));
 app.use("/api/users", require("./routes/user/userlist"));
 // app.use("/api/logs", require("./routes/logs/logs"));
+app.use("/api/master", require("./routes/main/school"));
+app.use("/api/master", require("./routes/main/department"));
 
 
 
