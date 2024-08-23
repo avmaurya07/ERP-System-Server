@@ -1,32 +1,52 @@
-# ERP System Server
+# College ERP System Server
 
-This repository contains the server-side implementation of the ERP (Enterprise Resource Planning) system. The ERP system is designed to manage and integrate various business processes within an organization. This server provides the necessary backend services, APIs, and database interactions to support the ERP system's functionalities.
+This repository contains the server-side implementation of a College ERP (Enterprise Resource Planning) system. The ERP system is designed to manage and streamline various academic processes within a college, providing dedicated functionalities for admins, students, and teachers.
 
 ## Features
 
-- **User Management**: Handle different types of users, such as admins, students, and teachers, with appropriate authentication and authorization mechanisms.
-- **Module Integration**: Seamless integration of various business modules like HR, finance, inventory, and more.
-- **Data Management**: Efficient handling of large datasets with optimized queries and data storage solutions.
-- **API Services**: RESTful APIs to interact with the frontend, ensuring smooth communication between client and server.
-- **Security**: Implementation of robust security measures, including encryption, secure login, and role-based access control.
+### Admin
+- **(Details will be updated later)**
+
+### Teacher
+- **Lecture Management**: View and manage scheduled lectures.
+- **Attendance**: Mark and track student attendance.
+- **Grades and Assignments**: Update and manage student marks and assignments.
+- **Course Content**: Manage and upload course materials and resources.
+
+### Student
+- **Attendance Tracking**: Check attendance records.
+- **Timetable**: View scheduled lectures (timetable).
+- **Grades**: Access marks and performance in assignments.
+- **Assignments**: Track and submit assignments.
 
 ## Project Structure
 
 ```plaintext
 erp-system/
 │
-├── src/
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── services/
-│   └── utils/
-│
-├── config/
-│   ├── database.js
-│   └── server.js
-│
-├── tests/
-├── .env.example
-├── package.json
-└── README.md
+├── middeleware/
+│   ├── fetchadmin.js
+│   └── fetchuser.js
+├── modals/
+│   ├── logs/
+│   │   └── logs.js
+│   └── users/
+│       ├── AdminUser.js
+│       ├── StudentUser.js
+│       └── TeacherUser.js
+├── routes/
+│   ├── auth/
+│   │   ├── changepassword.js
+│   │   ├── createuser.js
+│   │   ├── login.js
+│   │   └── masterlogin.js
+│   ├── logs/
+│   │   └── logs.js
+│   └── user/
+│       └── userlist.js
+├── .env
+├── db.js
+├── index.js
+├── package-lock.json
+└── package.json
+```
