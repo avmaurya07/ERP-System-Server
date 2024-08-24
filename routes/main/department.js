@@ -5,11 +5,12 @@ const fetchadmin = require("../../middeleware/fetchadmin");
 const fetchuser = require("../../middeleware/fetchuser");
 const router = express.Router();
 const { addlog } = require("../logs/logs");
+const Department = require("../../models/main/Department");
 
 router.post("/createdepartment", fetchadmin, async (req, res) => {
   //to create a Department
   try {
-    let dep = await department.findOne({
+    const dep = await department.findOne({
       departmentcode: req.body.departmentcode,
     });
     if (dep) {
@@ -18,7 +19,7 @@ router.post("/createdepartment", fetchadmin, async (req, res) => {
         .json({ msgtype: false, msg: "Department already exist" });
     }
 
-    dep = await department.create({
+    const newdep = await department.create({
       departmentname: req.body.departmentname,
       schoolcode: req.body.schoolcode,
       departmentcode: req.body.departmentcode,
@@ -38,25 +39,26 @@ router.post("/createdepartment", fetchadmin, async (req, res) => {
   }
 });
 
-
 router.post("/getdepartmentlist", fetchuser, async (req, res) => {
-  
-    try {
-      
-  
-      const departmentlist = await department.find({schoolcode:req.body.schoolcode})
-          .select("-date")
-          .select("-_id")
-          .select("-__v");
-        
-          res.json({ msgtype: true, msg: "Department List",departmentlist});
-          addlog(req.user.id,req.user.usertype,"List of Departments Accessed","Data Access")
-     
-    } catch (error) {
-      res
-        .status(500)
-        .json({ msgtype: false, msg: "Internal server error ocurred" });
-    }
-  });
+  try {
+    const departmentlist = await department
+      .find({ schoolcode: req.body.schoolcode })
+      .select("-date")
+      .select("-_id")
+      .select("-__v");
+
+    res.json({ msgtype: true, msg: "Department List", departmentlist });
+    addlog(
+      req.user.id,
+      req.user.usertype,
+      "List of Departments Accessed",
+      "Data Access"
+    );
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msgtype: false, msg: "Internal server error ocurred" });
+  }
+});
 
 module.exports = router;

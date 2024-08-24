@@ -2,6 +2,7 @@ const express = require("express");
 const adminuser = require("../../models/users/AdminUser");
 const studentuser = require("../../models/users/StudentUser");
 const teacheruser = require("../../models/users/TeacherUser");
+const cordinator = require("../../models/users/Cordinator");
 const fetchadmin = require("../../middeleware/fetchadmin");
 const router = express.Router();
 const { addlog} = require('../logs/logs');
@@ -50,6 +51,18 @@ router.post("/userlist", fetchadmin, async (req, res) => {
 
       res.json({ msgtype: true, msg: "Teacher User List",userlist});
       addlog(req.adminuser.id,"admin","List of Teachers Accessed","Data Access")
+    }
+
+
+    if (req.body.usertype == "cordinator") {
+
+      const userlist = await cordinator.find()
+        .select("-date")
+        .select("-_id")
+        .select("-__v");
+
+      res.json({ msgtype: true, msg: "Cordinator User List",userlist});
+      addlog(req.adminuser.id,"admin","List of Cordinators Accessed","Data Access")
     }
   } catch (error) {
     res

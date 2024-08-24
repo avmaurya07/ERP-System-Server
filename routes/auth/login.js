@@ -2,6 +2,7 @@ const express = require("express");
 const adminuser = require("../../models/users/AdminUser");
 const studentuser = require("../../models/users/StudentUser");
 const teacheruser = require("../../models/users/TeacherUser");
+const cordinator = require("../../models/users/Cordinator");
 const fetchuser = require("../../middeleware/fetchuser");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
@@ -164,6 +165,14 @@ router.post("/getuserdata",fetchuser,async (req,res)=>{
         const userId = req.user.id;
         const user = await teacheruser.findById(userId)
           .select("-password")
+          .select("-date")
+          .select("-_id")
+          .select("-__v");
+        res.json(user);
+    }
+        if (req.body.usertype=="cordinator"){
+        const userId = req.user.id;
+        const user = await cordinator.findById(userId)
           .select("-date")
           .select("-_id")
           .select("-__v");

@@ -2,6 +2,7 @@ const express = require("express");
 const adminuser = require("../../models/users/AdminUser");
 const studentuser = require("../../models/users/StudentUser");
 const teacheruser = require("../../models/users/TeacherUser");
+const cordinator = require("../../models/users/Cordinator");
 const fetchadmin = require("../../middeleware/fetchadmin");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
@@ -122,6 +123,30 @@ router.post("/createuser",fetchadmin,async (req,res)=>{
       
         res.json({ msgtype:true,authtoken,msg:"Teacher Registered" });
         addlog(req.adminuser.id,"admin",`Teacher user registered with EmpID: "${req.body.empid}"`,"RegisterUser")
+      }} catch (error) {
+        res.status(500).json({msgtype:false,msg:"Internal server error ocurred"});
+      }
+
+
+      // to create a cordinator
+    try {
+        if (req.body.usertype=="cordinator"){
+        let user = await cordinator.findOne({ empid: req.body.empid });
+        if (user) {
+          return res.status(400).json({msgtype:false, msg: "User already exist" });
+        }
+        // to create the user
+  
+        user = await cordinator.create({
+            empid: req.body.empid,
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone,
+            school: req.body.school,
+            department: req.body.department,
+        });
+        res.json({ msgtype:true,msg:"Cordinator Registered" });
+        addlog(req.adminuser.id,"admin",`Cordinator user registered with EmpID: "${req.body.empid}"`,"RegisterUser")
       }} catch (error) {
         res.status(500).json({msgtype:false,msg:"Internal server error ocurred"});
       }

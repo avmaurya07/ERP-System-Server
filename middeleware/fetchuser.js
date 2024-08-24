@@ -2,6 +2,7 @@ var jwt = require("jsonwebtoken");
 const adminuser = require("../models/users/AdminUser");
 const studentuser = require("../models/users/StudentUser");
 const teacheruser = require("../models/users/TeacherUser");
+const cordinator = require("../models/users/Cordinator");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const fetchuser = async (req, res, next) => {
@@ -16,11 +17,14 @@ const fetchuser = async (req, res, next) => {
     if ((await adminuser.findById(req.user.id))){
       req.user.usertype="admin"
     }
-    if ((await studentuser.findById(req.user.id))){
+    else if ((await studentuser.findById(req.user.id))){
       req.user.usertype="student"
     }
-    if ((await teacheruser.findById(req.user.id))){
+    else if ((await teacheruser.findById(req.user.id))){
       req.user.usertype="teacher"
+    }
+    else if ((await cordinator.findById(req.user.id))){
+      req.user.usertype="cordinator"
     }
     
     next();
