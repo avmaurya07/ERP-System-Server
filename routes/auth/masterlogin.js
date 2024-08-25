@@ -161,7 +161,7 @@ router.post("/switchuser", fetchteacher, async (req, res) => {
           usertype: "teacher",
         });
         // addlog(
-        //   req.fetchteacher.id,
+        //   req.teacheruser.id,
         //   "teacher",
         //   "Login Success",
         //   "Login"

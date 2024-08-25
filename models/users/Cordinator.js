@@ -29,7 +29,11 @@ const CordinatorSchema = new Schema({
     },
     roles: {
         type: Object,
-    },
+        default:{
+              "timetable":false,
+              "studentcontrol":false
+            },
+        },
     date: {
         type: Date,
         default: Date.now
