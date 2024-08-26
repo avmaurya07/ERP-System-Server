@@ -12,9 +12,9 @@ router.post("/createbatch", fetchteacher, async (req, res) => {
   //to create a batch
   try {
     const dep = await batches.findOne({
-        batchcode: req.body.batchcode,
-        academicyearcode: req.body.academicyearcode,
-        semestercode: req.body.semestercode,
+      batchcode: req.body.batchcode,
+      academicyearcode: req.body.academicyearcode,
+      semestercode: req.body.semestercode,
     });
     if (dep) {
       return res
@@ -22,8 +22,9 @@ router.post("/createbatch", fetchteacher, async (req, res) => {
         .json({ msgtype: false, msg: "Batch already exist" });
     }
 
-    const user = await cordinator.findById(req.teacheruser.id)
-    const newdep = await batches.create({
+    const user = await cordinator.findById(req.teacheruser.id);
+    if (req.body.usertype === "cordinator") {
+      const newdep = await batches.create({
         academicyearname: req.body.academicyearname,
         academicyearcode: req.body.academicyearcode,
         semestername: req.body.semestername,
@@ -32,15 +33,35 @@ router.post("/createbatch", fetchteacher, async (req, res) => {
         departmentcode: user.department,
         batchname: req.body.batchname,
         batchcode: req.body.batchcode,
-    });
+      });
+      res.json({ msgtype: true, msg: "Batch Registered" });
+      // addlog(
+      //   req.adminuser.id,
+      //   "admin",
+      //   `Department "${req.body.departmentname}" Registered`,
+      //   "Main"
+      // );
+    }
 
-    res.json({ msgtype: true, msg: "Batch Registered" });
-    // addlog(
-    //   req.adminuser.id,
-    //   "admin",
-    //   `Department "${req.body.departmentname}" Registered`,
-    //   "Main"
-    // );
+    if (req.body.usertype==="admin"){
+      const newdep = await batches.create({
+        academicyearname: req.body.academicyearname,
+        academicyearcode: req.body.academicyearcode,
+        semestername: req.body.semestername,
+        semestercode: req.body.semestercode,
+        schoolcode: req.body.school,
+        departmentcode: req.body.department,
+        batchname: req.body.batchname,
+        batchcode: req.body.batchcode,
+      });
+      res.json({ msgtype: true, msg: "Batch Registered" });
+      // addlog(
+      //   req.adminuser.id,
+      //   "admin",
+      //   `Department "${req.body.departmentname}" Registered`,
+      //   "Main"
+      // );
+    }
   } catch (error) {
     res
       .status(500)
@@ -50,23 +71,29 @@ router.post("/createbatch", fetchteacher, async (req, res) => {
 
 router.post("/getbatchlist", fetchuser, async (req, res) => {
   try {
-    let user=[]
-    if (req.user.usertype==="cordinator"){
-    user = await cordinator.findById(req.user.id)
+    let user = [];
+    if (req.user.usertype === "cordinator") {
+      user = await cordinator.findById(req.user.id);
     }
-    if (req.user.usertype==="student"){
-    user = await studentuser.findById(req.user.id)
+    if (req.user.usertype === "student") {
+      user = await studentuser.findById(req.user.id);
     }
-    if (req.user.usertype==="teacher"){
-    user = await teacheruser.findById(req.user.id)
+    if (req.user.usertype === "teacher") {
+      user = await teacheruser.findById(req.user.id);
+    }
+    if (req.user.usertype==="admin"){
+      user = {
+        school:req.body.schoolcode,
+        department:req.body.departmentcode,
+      }
     }
     const semesterlist = await batches
-      .find({schoolcode:user.school,departmentcode:user.department})
+      .find({ schoolcode: user.school, departmentcode: user.department })
       .select("-date")
       .select("-_id")
       .select("-__v");
 
-    res.json({ msgtype: true, msg: "Batch List", batchlist:semesterlist });
+    res.json({ msgtype: true, msg: "Batch List", batchlist: semesterlist });
     // addlog(
     //   req.user.id,
     //   req.user.usertype,

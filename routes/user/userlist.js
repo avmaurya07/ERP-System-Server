@@ -19,13 +19,13 @@ router.post("/userlist", fetchteacher, async (req, res) => {
         .select("-_id")
         .select("-__v");
 
-      res.json({ msgtype: true, msg: "Admin User List", userlist });
-      addlog(
-        req.adminuser.id,
-        "admin",
-        "List of Admins Accessed",
-        "Data Access"
-      );
+     return res.json({ msgtype: true, msg: "Admin User List", userlist });
+      // addlog(
+      //   req.adminuser.id,
+      //   "admin",
+      //   "List of Admins Accessed",
+      //   "Data Access"
+      // );
     }
 
     if (req.body.usertype == "student") {
@@ -36,7 +36,7 @@ router.post("/userlist", fetchteacher, async (req, res) => {
         .select("-_id")
         .select("-__v");
 
-      res.json({ msgtype: true, msg: "Student User List", userlist });
+    return  res.json({ msgtype: true, msg: "Student User List", userlist });
       // addlog(
       //   req.adminuser.id,
       //   "admin",
@@ -53,7 +53,7 @@ router.post("/userlist", fetchteacher, async (req, res) => {
         .select("-_id")
         .select("-__v");
 
-      res.json({ msgtype: true, msg: "Teacher User List", userlist });
+     return res.json({ msgtype: true, msg: "Teacher User List", userlist });
       // addlog(
       //   req.adminuser.id,
       //   "admin",
@@ -69,7 +69,7 @@ router.post("/userlist", fetchteacher, async (req, res) => {
         .select("-_id")
         .select("-__v");
 
-      res.json({ msgtype: true, msg: "Cordinator User List", userlist });
+     return res.json({ msgtype: true, msg: "Cordinator User List", userlist });
       // addlog(
       //   req.adminuser.id,
       //   "admin",
@@ -88,13 +88,15 @@ router.put("/editroles", fetchadmin, async (req, res) => {
   try {
     const user = await cordinator.findOneAndUpdate(
       { empid: req.body.empid },
-      { $set: {
-        'roles.timetable': req.body.timetable,
-        'roles.studentcontrol': req.body.studentcontrol
-      }},
+      {
+        $set: {
+          "roles.timetable": req.body.timetable,
+          "roles.studentcontrol": req.body.studentcontrol,
+        },
+      },
       {
         new: true,
-        runValidators: true
+        runValidators: true,
       }
     );
     res.json({ msgtype: true, msg: "Roles Updated" });
@@ -106,12 +108,20 @@ router.put("/editroles", fetchadmin, async (req, res) => {
   }
 });
 
-
-
 router.post("/getroles", fetchuser, async (req, res) => {
   try {
-    const roles = await cordinator.findOne({empid: req.body.empid});
-    res.json({ msgtype: true, msg: "Roles Fetched",roles:roles.roles });
+    if (req.body.usertype === "cordinator") {
+      const roles = await cordinator.findOne({ empid: req.body.empid });
+      res.json({ msgtype: true, msg: "Roles Fetched", roles: roles.roles });
+    }
+    if (req.body.usertype === "admin") {
+      const roles = {
+        timetable:true,
+        studentcontrol:true,
+      };
+      res.json({ msgtype: true, msg: "Roles Fetched", roles});
+    }
+    
     // addlog(req.adminuser.id, "admin", `Roles of ${empid} updated.`, "Master");
   } catch (error) {
     res
@@ -119,8 +129,5 @@ router.post("/getroles", fetchuser, async (req, res) => {
       .json({ msgtype: false, msg: "Internal server error ocurred" });
   }
 });
-
-
-
 
 module.exports = router;
