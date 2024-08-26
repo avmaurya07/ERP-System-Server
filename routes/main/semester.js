@@ -9,10 +9,12 @@ const Department = require("../../models/main/Department");
 router.post("/createsemester", fetchadmin, async (req, res) => {
   //to create a Department
   try {
-    const dep = await semester.findOne({
+    const dep = await semester.find({
       semestercode: req.body.semestercode,
+      academicyearcode: req.body.academicyearcode,
     });
-    if (dep) {
+    console.log(dep)
+    if (!(dep.length === 0)) {
       return res
         .status(400)
         .json({ msgtype: false, msg: "Semester already exist" });

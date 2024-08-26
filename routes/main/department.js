@@ -13,7 +13,7 @@ router.post("/createdepartment", fetchadmin, async (req, res) => {
     const dep = await department.findOne({
       departmentcode: req.body.departmentcode,
     });
-    if (dep) {
+    if (!(dep.length === 0)) {
       return res
         .status(400)
         .json({ msgtype: false, msg: "Department already exist" });

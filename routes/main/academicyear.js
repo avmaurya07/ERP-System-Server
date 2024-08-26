@@ -22,7 +22,6 @@ router.post("/createacademicyear", fetchadmin, async (req, res) => {
       academicyearname: req.body.academicyearname,
       academicyearcode: req.body.academicyearcode,
     });
-
     res.json({ msgtype: true, msg: "Academic Year Registered" });
     // addlog(
     //   req.adminuser.id,
@@ -33,7 +32,7 @@ router.post("/createacademicyear", fetchadmin, async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ msgtype: false, msg: "Internal server error ocurred" });
+      .json({ msgtype: false, msg: "Internal server error ocurred"});
   }
 });
 

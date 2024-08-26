@@ -30,12 +30,11 @@ const BatchesSchema = new Schema({
   },
   batchcode: {
     type: String,
-    unique: true,
     required: true,
   },
   students: {
     type: Object,
-    default:{},
+    default:[],
     },
   date: {
     type: Date,

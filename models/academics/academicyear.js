@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const AcademinyearSchema = new Schema({
+const AcademicyearSchema = new Schema({
   academicyearname: {
     type: String,
   },
@@ -14,4 +14,4 @@ const AcademinyearSchema = new Schema({
     default: Date.now,
   },
 });
-module.exports = mongoose.model("academicyear", AcademinyearSchema);
+module.exports = mongoose.model("academicyear", AcademicyearSchema);

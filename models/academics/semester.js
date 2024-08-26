@@ -12,7 +12,6 @@ const SemesterSchema = new Schema({
   },
   semestercode: {
     type: String,
-    unique: true,
     required: true,
   },
   date: {

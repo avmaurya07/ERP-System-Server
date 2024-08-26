@@ -5,10 +5,11 @@ const teacheruser = require("../../models/users/TeacherUser");
 const cordinator = require("../../models/users/Cordinator");
 const fetchadmin = require("../../middeleware/fetchadmin");
 const fetchuser = require("../../middeleware/fetchuser");
+const fetchteacher = require("../../middeleware/fetchteacher");
 const router = express.Router();
 const { addlog } = require("../logs/logs");
 
-router.post("/userlist", fetchadmin, async (req, res) => {
+router.post("/userlist", fetchteacher, async (req, res) => {
   try {
     if (req.body.usertype == "admin") {
       const userlist = await adminuser
@@ -36,12 +37,12 @@ router.post("/userlist", fetchadmin, async (req, res) => {
         .select("-__v");
 
       res.json({ msgtype: true, msg: "Student User List", userlist });
-      addlog(
-        req.adminuser.id,
-        "admin",
-        "List of Students Accessed",
-        "Data Access"
-      );
+      // addlog(
+      //   req.adminuser.id,
+      //   "admin",
+      //   "List of Students Accessed",
+      //   "Data Access"
+      // );
     }
 
     if (req.body.usertype == "teacher") {
@@ -53,12 +54,12 @@ router.post("/userlist", fetchadmin, async (req, res) => {
         .select("-__v");
 
       res.json({ msgtype: true, msg: "Teacher User List", userlist });
-      addlog(
-        req.adminuser.id,
-        "admin",
-        "List of Teachers Accessed",
-        "Data Access"
-      );
+      // addlog(
+      //   req.adminuser.id,
+      //   "admin",
+      //   "List of Teachers Accessed",
+      //   "Data Access"
+      // );
     }
 
     if (req.body.usertype == "cordinator") {
@@ -69,12 +70,12 @@ router.post("/userlist", fetchadmin, async (req, res) => {
         .select("-__v");
 
       res.json({ msgtype: true, msg: "Cordinator User List", userlist });
-      addlog(
-        req.adminuser.id,
-        "admin",
-        "List of Cordinators Accessed",
-        "Data Access"
-      );
+      // addlog(
+      //   req.adminuser.id,
+      //   "admin",
+      //   "List of Cordinators Accessed",
+      //   "Data Access"
+      // );
     }
   } catch (error) {
     res
