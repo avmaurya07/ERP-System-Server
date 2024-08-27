@@ -110,17 +110,8 @@ router.put("/editroles", fetchadmin, async (req, res) => {
 
 router.post("/getroles", fetchuser, async (req, res) => {
   try {
-    if (req.body.usertype === "cordinator") {
       const roles = await cordinator.findOne({ empid: req.body.empid });
       res.json({ msgtype: true, msg: "Roles Fetched", roles: roles.roles });
-    }
-    if (req.body.usertype === "admin") {
-      const roles = {
-        timetable:true,
-        studentcontrol:true,
-      };
-      res.json({ msgtype: true, msg: "Roles Fetched", roles});
-    }
     
     // addlog(req.adminuser.id, "admin", `Roles of ${empid} updated.`, "Master");
   } catch (error) {
