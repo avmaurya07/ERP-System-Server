@@ -3,9 +3,9 @@ const adminuser = require("../../models/users/AdminUser");
 const studentuser = require("../../models/users/StudentUser");
 const teacheruser = require("../../models/users/TeacherUser");
 const cordinator = require("../../models/users/Cordinator");
-const fetchadmin = require("../../middeleware/fetchadmin");
-const fetchuser = require("../../middeleware/fetchuser");
-const fetchteacher = require("../../middeleware/fetchteacher");
+const fetchadmin = require("../../middleware/fetchadmin");
+const fetchuser = require("../../middleware/fetchuser");
+const fetchteacher = require("../../middleware/fetchteacher");
 const router = express.Router();
 const { addlog } = require("../logs/logs");
 

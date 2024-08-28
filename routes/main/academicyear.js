@@ -1,8 +1,8 @@
 const express = require("express");
 const academicyear = require("../../models/academics/academicyear");
 const batches = require("../../models/academics/batches");
-const fetchadmin = require("../../middeleware/fetchadmin");
-const fetchuser = require("../../middeleware/fetchuser");
+const fetchadmin = require("../../middleware/fetchadmin");
+const fetchuser = require("../../middleware/fetchuser");
 const router = express.Router();
 const { addlog } = require("../logs/logs");
 

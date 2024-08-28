@@ -26,6 +26,7 @@ app.use("/api/master", require("./routes/main/department"));
 app.use("/api/master", require("./routes/main/academicyear"));
 app.use("/api/master", require("./routes/main/semester"));
 app.use("/api/academic", require("./routes/academic/batch"));
+app.use("/api/academic", require("./routes/academic/classes"));
 
 
 
