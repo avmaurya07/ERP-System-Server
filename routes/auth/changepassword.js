@@ -35,6 +35,7 @@ router.put("/changepassword", fetchuser, async (req, res) => {
         email: req.body.email,
         phone: req.body.phone,
         password: secPass,
+        istempPassword: false,
       });
       //for creating a auth token
       const data = {
@@ -75,6 +76,7 @@ router.put("/changepassword", fetchuser, async (req, res) => {
         email: req.body.email,
         phone: req.body.phone,
         password: secPass,
+        istempPassword: false,
       });
       //for creating a auth token
       const data = {
@@ -118,6 +120,7 @@ router.put("/changepassword", fetchuser, async (req, res) => {
         email: req.body.email,
         phone: req.body.phone,
         password: secPass,
+        istempPassword: false,
       });
       //for creating a auth token
       const data = {

@@ -29,14 +29,15 @@ router.post("/login",async (req,res)=>{
               let user = await adminuser.findOne({ email });
               //if user does not exist
               if (!user) {
-                return res.status(400).json({msgtype:false, msg: "Invalid SystemID/Password" });
+                return res.status(400).json({msgtype:false, msg: "Invalid Email/Password" });
               }
               //to compare entered password with the database
               const passwordCompare = await bcrypt.compare(password, user.password);
               //if password is wrong
               if (!passwordCompare) {
-                return res.status(400).json({msgtype:false, msg: "Invalid SystemID/Password" });
+                return res.status(400).json({msgtype:false, msg: "Invalid Email/Password" });
               }
+              const istemppassword = user.istemppassword
               //for creating a auth token
               const data = {
                 user: {
@@ -46,7 +47,7 @@ router.post("/login",async (req,res)=>{
         
               const authtoken = jwt.sign(data, JWT_SECRET);
         
-              res.json({ msgtype:true,authtoken,msg:"Login Success",usertype:"admin" });
+              res.json({ msgtype:true,authtoken,msg:"Login Success",usertype:"admin",istemppassword:user.istempPassword });
               addlog(user.id,"admin","Login Success","Login")
             } catch (error) {
               res.status(500).json({msgtype:false,msg:"Internal server error ocurred"});
@@ -85,7 +86,7 @@ router.post("/login",async (req,res)=>{
         
               const authtoken = jwt.sign(data, JWT_SECRET);
         
-              res.json({ msgtype:true,authtoken,msg:"Login Success",usertype:"student" });
+              res.json({ msgtype:true,authtoken,msg:"Login Success",usertype:"student",istemppassword:user.istemppassword  });
               addlog(user.id,"student","Login Success","Login")
             } catch (error) {
               res.status(500).json({msgtype:false,msg:"Internal server error ocurred"});
@@ -108,13 +109,13 @@ router.post("/login",async (req,res)=>{
               let user = await teacheruser.findOne({ empid });
               //if user does not exist
               if (!user) {
-                return res.status(400).json({msgtype:false, msg: "Invalid SystemID/Password" });
+                return res.status(400).json({msgtype:false, msg: "Invalid EmpID/Password" });
               }
               //to compare entered password with the database
               const passwordCompare = await bcrypt.compare(password, user.password);
               //if password is wrong
               if (!passwordCompare) {
-                return res.status(400).json({msgtype:false, msg: "Invalid SystemID/Password" });
+                return res.status(400).json({msgtype:false, msg: "Invalid EmpID/Password" });
               }
               //for creating a auth token
               const data = {
@@ -125,7 +126,7 @@ router.post("/login",async (req,res)=>{
         
               const authtoken = jwt.sign(data, JWT_SECRET);
         
-              res.json({ msgtype:true,authtoken,msg:"Login Success",usertype:"teacher" });
+              res.json({ msgtype:true,authtoken,msg:"Login Success",usertype:"teacher",istemppassword:user.istemppassword });
               addlog(user.id,"teacher","Login Success","Login")
             } catch (error) {
               res.status(500).json({msgtype:false,msg:"Internal server error ocurred"});

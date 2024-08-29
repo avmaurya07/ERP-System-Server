@@ -12,11 +12,14 @@ const teacheruser = require("../../models/users/TeacherUser");
 
 router.post("/createclass", fetchteacher, async (req, res) => {
   //to create a class
+  
+    const user = await cordinator.findById(req.teacheruser.id);
+    const coursename = await courses.findOne({coursecode:req.body.coursecode});
+    const batchname = await batches.findOne({batchcode:req.body.batchcode});
+    const teachername = await teacheruser.findOne({empid:req.body.teachercode});
   try {
     const dep = await classes.findOne({
-      classcode: req.body.classcode,
-      academicyearcode: req.body.academicyearcode,
-      semestercode: req.body.semestercode,
+      classcode: `${req.body.teachercode}-(${req.body.coursecode})-(${req.body.academicyearname})-(${req.body.semestername})-${req.body.batchcode}`
     });
     if (dep) {
       return res
@@ -24,7 +27,6 @@ router.post("/createclass", fetchteacher, async (req, res) => {
         .json({ msgtype: false, msg: "Class already exist" });
     }
 
-    const user = await cordinator.findById(req.teacheruser.id);
     if (req.body.usertype === "cordinator") {
       const newdep = await classes.create({
         academicyearname: req.body.academicyearname,
@@ -33,14 +35,16 @@ router.post("/createclass", fetchteacher, async (req, res) => {
         semestercode: req.body.semestercode,
         schoolcode: user.school,
         departmentcode: user.department,
-        batchname: req.body.batchname,
+        batchname: batchname.batchname,
         batchcode: req.body.batchcode,
-        classname: req.body.classname,
-        classcode: req.body.classcode,
+        classname: `<ul><li>&#9658;${teachername.name}</li><li>&#9658;${coursename.coursename}</li><li>&#9658;${req.body.academicyearname}</li><li>&#9658;${req.body.semestername}</li><li>&#9658;${batchname.batchname}</li></ul>`,
+        classcode: `${req.body.teachercode}-(${req.body.coursecode})-(${req.body.academicyearname})-(${req.body.semestername})-${req.body.batchcode}`,
         coursecode: req.body.coursecode,
-        coursename: req.body.coursename,
+        coursename: coursename.coursename,
+        teachername:teachername.name,
+        teachercode:req.body.teachercode,
       });
-      return res.json({ msgtype: true, msg: "Class Registered",class:user });
+      return res.json({ msgtype: true, msg: "Class Registered"});
       // addlog(
       //   req.adminuser.id,
       //   "admin",
@@ -57,12 +61,19 @@ router.post("/createclass", fetchteacher, async (req, res) => {
         semestercode: req.body.semestercode,
         schoolcode: req.body.schoolcode,
         departmentcode: req.body.departmentcode,
-        batchname: req.body.batchname,
+        batchname: batchname.batchname,
         batchcode: req.body.batchcode,
-        classname: req.body.classname,
-        classcode: req.body.classcode,
+        classname: `<ul><li>&#9658;${teachername.name}</li><li>&#9658;${coursename.coursename}</li><li>&#9658;${req.body.academicyearname}</li><li>&#9658;${req.body.semestername}</li><li>&#9658;${batchname.batchname}</li></ul>`,
+        classcode: `${req.body.teachercode}-(${req.body.coursecode})-(${req.body.academicyearname})-(${req.body.semestername})-${req.body.batchcode}`,
+        coursecode: req.body.coursecode,
+        coursename: coursename.coursename,
+        teachername:teachername.name,
+        teachercode:req.body.teachercode,
       });
-      return res.json({ msgtype: true, msg: "Class Registered",class:newdep  });
+      return res.json({
+        msgtype: true,
+        msg: "Class Registered"
+      });
       // addlog(
       //   req.adminuser.id,
       //   "admin",
@@ -73,15 +84,12 @@ router.post("/createclass", fetchteacher, async (req, res) => {
       return res.json({ msgtype: false, msg: "Not Authorized" });
     }
   } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .json({ msgtype: false, msg: "Internal server error ocurred" });
   }
 });
-
-
-
-
 
 router.post("/getclasslist", fetchuser, async (req, res) => {
   try {
@@ -102,11 +110,16 @@ router.post("/getclasslist", fetchuser, async (req, res) => {
       };
     }
     const semesterlist = await classes
-      .find({ schoolcode: user.school, departmentcode: user.department,academicyearcode:req.body.academicyearcode,semestercode:req.body.semestercode,batchcode:req.body.batchcode })
+      .find({
+        schoolcode: user.school,
+        departmentcode: user.department,
+        academicyearcode: req.body.academicyearcode,
+        semestercode: req.body.semestercode,
+        batchcode: req.body.batchcode,
+      })
       .select("-date")
       .select("-_id")
       .select("-__v");
-
     return res.json({
       msgtype: true,
       msg: "Class List",

@@ -19,7 +19,7 @@ router.post("/userlist", fetchteacher, async (req, res) => {
         .select("-_id")
         .select("-__v");
 
-     return res.json({ msgtype: true, msg: "Admin User List", userlist });
+      return res.json({ msgtype: true, msg: "Admin User List", userlist });
       // addlog(
       //   req.adminuser.id,
       //   "admin",
@@ -36,7 +36,7 @@ router.post("/userlist", fetchteacher, async (req, res) => {
         .select("-_id")
         .select("-__v");
 
-    return  res.json({ msgtype: true, msg: "Student User List", userlist });
+      return res.json({ msgtype: true, msg: "Student User List", userlist });
       // addlog(
       //   req.adminuser.id,
       //   "admin",
@@ -53,7 +53,7 @@ router.post("/userlist", fetchteacher, async (req, res) => {
         .select("-_id")
         .select("-__v");
 
-     return res.json({ msgtype: true, msg: "Teacher User List", userlist });
+      return res.json({ msgtype: true, msg: "Teacher User List", userlist });
       // addlog(
       //   req.adminuser.id,
       //   "admin",
@@ -69,7 +69,7 @@ router.post("/userlist", fetchteacher, async (req, res) => {
         .select("-_id")
         .select("-__v");
 
-     return res.json({ msgtype: true, msg: "Cordinator User List", userlist });
+      return res.json({ msgtype: true, msg: "Cordinator User List", userlist });
       // addlog(
       //   req.adminuser.id,
       //   "admin",
@@ -86,12 +86,27 @@ router.post("/userlist", fetchteacher, async (req, res) => {
 
 router.put("/editroles", fetchadmin, async (req, res) => {
   try {
+    let studentcontrol = req.body.studentcontrol;
+    let batches = req.body.batches;
+    let courses = req.body.courses;
+    let classes = req.body.classes;
+    if (!req.body.batches && !req.body.courses && !req.body.classes) {
+      studentcontrol = false;
+    }
+    if (!req.body.studentcontrol) {
+      batches = false;
+      courses = false;
+      classes = false;
+    }
     const user = await cordinator.findOneAndUpdate(
       { empid: req.body.empid },
       {
         $set: {
           "roles.timetable": req.body.timetable,
-          "roles.studentcontrol": req.body.studentcontrol,
+          "roles.studentcontrol": studentcontrol,
+          "roles.batches": batches,
+          "roles.courses": courses,
+          "roles.classes": classes,
         },
       },
       {
@@ -110,9 +125,9 @@ router.put("/editroles", fetchadmin, async (req, res) => {
 
 router.post("/getroles", fetchuser, async (req, res) => {
   try {
-      const roles = await cordinator.findOne({ empid: req.body.empid });
-      res.json({ msgtype: true, msg: "Roles Fetched", roles: roles.roles });
-    
+    const roles = await cordinator.findOne({ empid: req.body.empid });
+    res.json({ msgtype: true, msg: "Roles Fetched", roles: roles.roles });
+
     // addlog(req.adminuser.id, "admin", `Roles of ${empid} updated.`, "Master");
   } catch (error) {
     res

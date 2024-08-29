@@ -18,6 +18,10 @@ const AdminUserSchema = new Schema({
         type: String,
         required: true
     },
+    istempPassword: { 
+        type: Boolean,
+        default: true
+    },
     date: {
         type: Date,
         default: Date.now
