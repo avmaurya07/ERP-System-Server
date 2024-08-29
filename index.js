@@ -11,7 +11,7 @@ const port = process.env.PORT || 5000;
 
 //just for fun
 app.get("/",(req,res) => {
-  res.send("Chala ja BSDK...")
+  res.send("<h1>You are on ERP System Server</h1>")
 })
 
 //Available routes yani ki apis
@@ -28,6 +28,7 @@ app.use("/api/master", require("./routes/main/academicyear"));
 app.use("/api/master", require("./routes/main/semester"));
 app.use("/api/academic", require("./routes/academic/batch"));
 app.use("/api/academic", require("./routes/academic/classes"));
+app.use("/api/academic", require("./routes/academic/mycourses"));
 
 
 

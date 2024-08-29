@@ -10,6 +10,10 @@ const LogsSchema = new Schema({
   logdata: {
     type: String,
   },
+  ip: {
+    type: String,
+    default: " ",
+  },
   logtype: {
     type: String,
   },

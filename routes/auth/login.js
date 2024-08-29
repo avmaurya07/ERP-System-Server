@@ -152,7 +152,7 @@ router.post("/getuserdata",fetchuser,async (req,res)=>{
           .select("-date")
           .select("-_id")
           .select("-__v");
-        res.json({user});
+        res.json({msgtype:true,user});
     }
         if (req.body.usertype=="student"){
         const userId = req.user.id;
@@ -161,7 +161,7 @@ router.post("/getuserdata",fetchuser,async (req,res)=>{
           .select("-date")
           .select("-_id")
           .select("-__v");
-        res.json({user});
+        res.json({msgtype:true,user});
     }
         if (req.body.usertype=="teacher"){
         const userId = req.user.id;
@@ -175,7 +175,7 @@ router.post("/getuserdata",fetchuser,async (req,res)=>{
           if(cordinatoruser){
             iscordinator=true
           }
-        res.json({user,iscordinator});
+        res.json({msgtype:true,user,iscordinator});
     }
         if (req.body.usertype=="cordinator"){
         const userId = req.user.id;
@@ -183,7 +183,7 @@ router.post("/getuserdata",fetchuser,async (req,res)=>{
           .select("-date")
           .select("-_id")
           .select("-__v");
-        res.json({user});
+        res.json({msgtype:true,user});
     }
       } catch (error) {
         res.status(500).json({msgtype:false,msg:"Internal server error ocurred"});
