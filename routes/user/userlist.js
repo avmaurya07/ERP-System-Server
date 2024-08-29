@@ -9,73 +9,122 @@ const fetchteacher = require("../../middleware/fetchteacher");
 const router = express.Router();
 const { addlog } = require("../logs/logs");
 
-router.post("/userlist", fetchteacher, async (req, res) => {
+router.post("/userlist", fetchuser, async (req, res) => {
   try {
-    if (req.body.usertype == "admin") {
-      const userlist = await adminuser
-        .find()
-        .select("-password")
-        .select("-date")
-        .select("-_id")
-        .select("-__v");
+    if (req.user.usertype == "admin") {
+      if (req.body.usertype == "admin") {
+        const userlist = await adminuser
+          .find()
+          .select("-password")
+          .select("-date")
+          .select("-_id")
+          .select("-__v");
 
-      return res.json({ msgtype: true, msg: "Admin User List", userlist });
-      // addlog(
-      //   req.adminuser.id,
-      //   "admin",
-      //   "List of Admins Accessed",
-      //   "Data Access"
-      // );
-    }
+        return res.json({ msgtype: true, msg: "Admin User List", userlist });
+        // addlog(
+        //   req.adminuser.id,
+        //   "admin",
+        //   "List of Admins Accessed",
+        //   "Data Access"
+        // );
+      }
 
-    if (req.body.usertype == "student") {
-      const userlist = await studentuser
-        .find()
-        .select("-password")
-        .select("-date")
-        .select("-_id")
-        .select("-__v");
+      if (req.body.usertype == "student") {
+        const userlist = await studentuser
+          .find()
+          .select("-password")
+          .select("-date")
+          .select("-_id")
+          .select("-__v");
 
-      return res.json({ msgtype: true, msg: "Student User List", userlist });
-      // addlog(
-      //   req.adminuser.id,
-      //   "admin",
-      //   "List of Students Accessed",
-      //   "Data Access"
-      // );
-    }
+        return res.json({ msgtype: true, msg: "Student User List", userlist });
+        // addlog(
+        //   req.adminuser.id,
+        //   "admin",
+        //   "List of Students Accessed",
+        //   "Data Access"
+        // );
+      }
 
-    if (req.body.usertype == "teacher") {
-      const userlist = await teacheruser
-        .find()
-        .select("-password")
-        .select("-date")
-        .select("-_id")
-        .select("-__v");
+      if (req.body.usertype == "teacher") {
+        const userlist = await teacheruser
+          .find()
+          .select("-password")
+          .select("-date")
+          .select("-_id")
+          .select("-__v");
 
-      return res.json({ msgtype: true, msg: "Teacher User List", userlist });
-      // addlog(
-      //   req.adminuser.id,
-      //   "admin",
-      //   "List of Teachers Accessed",
-      //   "Data Access"
-      // );
-    }
+        return res.json({ msgtype: true, msg: "Teacher User List", userlist });
+        // addlog(
+        //   req.adminuser.id,
+        //   "admin",
+        //   "List of Teachers Accessed",
+        //   "Data Access"
+        // );
+      }
 
-    if (req.body.usertype == "cordinator") {
-      const userlist = await cordinator
-        .find()
-        .select("-date")
-        .select("-_id")
-        .select("-__v");
+      if (req.body.usertype == "cordinator") {
+        const userlist = await cordinator
+          .find()
+          .select("-date")
+          .select("-_id")
+          .select("-__v");
 
-      return res.json({ msgtype: true, msg: "Cordinator User List", userlist });
-      // addlog(
-      //   req.adminuser.id,
-      //   "admin",
-      //   "List of Cordinators Accessed",
-      //   "Data Access"
-      // );
+        return res.json({
+          msgtype: true,
+          msg: "Cordinator User List",
+          userlist,
+        });
+        // addlog(
+        //   req.adminuser.id,
+        //   "admin",
+        //   "List of Cordinators Accessed",
+        //   "Data Access"
+        // );
+      }
+    } else {
+      let data;
+      if (req.user.usertype === "cordinator") {
+        data = await cordinator.findById(req.user.id);
+      }
+      if (req.user.usertype === "teacher") {
+        data = await teacheruser.findById(req.user.id);
+      }
+      if (req.user.usertype === "student") {
+        data = await studentuser.findById(req.user.id);
+      }
+      if (req.body.usertype == "teacher") {
+        const userlist = await teacheruser
+          .find({ school: data.school, department: data.department })
+          .select("-password")
+          .select("-date")
+          .select("-_id")
+          .select("-__v");
+
+        return res.json({ msgtype: true, msg: "Teacher User List", userlist });
+        // addlog(
+        //   req.adminuser.id,
+        //   "admin",
+        //   "List of Teachers Accessed",
+        //   "Data Access"
+        // );
+      }
+      if (req.body.usertype == "student") {
+        const userlist = await studentuser
+          .find({ school: data.school, department: data.department })
+          .select("-password")
+          .select("-date")
+          .select("-_id")
+          .select("-__v");
+
+        return res.json({ msgtype: true, msg: "Student User List", userlist });
+        // addlog(
+        //   req.adminuser.id,
+        //   "admin",
+        //   "List of Students Accessed",
+        //   "Data Access"
+        // );
+      }
     }
   } catch (error) {
     res

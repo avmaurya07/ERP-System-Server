@@ -144,6 +144,7 @@ router.post("/login",async (req,res)=>{
 router.post("/getuserdata",fetchuser,async (req,res)=>{
 
     try {
+      
         if (req.body.usertype=="admin"){
         const userId = req.user.id;
         const user = await adminuser.findById(userId)

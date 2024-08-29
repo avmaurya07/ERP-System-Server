@@ -84,7 +84,6 @@ router.post("/createclass", fetchteacher, async (req, res) => {
       return res.json({ msgtype: false, msg: "Not Authorized" });
     }
   } catch (error) {
-    console.log(error);
     return res
       .status(500)
       .json({ msgtype: false, msg: "Internal server error ocurred" });
