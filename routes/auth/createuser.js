@@ -153,4 +153,53 @@ router.post("/createuser",fetchadmin,async (req,res)=>{
 })
 
 
+
+router.post("/createbulkstudent", fetchadmin, async (req, res) => {
+  try {
+      let students = req.body.students;
+      let studentArray = [];
+      let invalidStudents = [];
+      let existingStudents = [];
+
+      for (let student of students) {
+          // Validate student format
+          if (!student.systemid || !student.name || !student.email || !student.phone || !student.schoolcode || !student.departmentcode) {
+              invalidStudents.push(student);
+              continue;
+          }
+
+          // Check if student with the same systemid already exists
+          let existingStudent = await studentuser.findOne({ systemid: student.systemid });
+          if (existingStudent) {
+              existingStudents.push(student);
+              continue;
+          }
+
+          studentArray.push({
+              systemid: student.systemid,
+              name: student.name,
+              email: student.email,
+              phone: student.phone,
+              school: student.schoolcode,
+              department: student.departmentcode,
+              password: bcrypt.hashSync("1234", bcrypt.genSaltSync(10)),
+          });
+      }
+
+      if (studentArray.length > 0) {
+          await studentuser.insertMany(studentArray);
+      }
+
+      res.json({
+          msgtype: true,
+          msg: "Bulk Student user registered",
+          invalidStudents,
+          existingStudents
+      });
+
+      addlog(req.adminuser.id, "admin", `Bulk Student user registered`, "RegisterUser");
+  } catch (error) {
+      res.status(500).json({ msgtype: false, msg: "Internal server error occurred" });
+  }
+});
 module.exports = router
