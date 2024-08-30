@@ -32,6 +32,6 @@ app.use("/api/academic", require("./routes/academic/mycourses"));
 
 
 
-app.listen(port, () => {
+app.listen(port,"0.0.0.0", () => {
   console.log(`ERP-System Server listening at http://localhost:${port}`);
 });
