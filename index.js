@@ -30,6 +30,7 @@ app.use("/api/academic", require("./routes/academic/batch"));
 app.use("/api/academic", require("./routes/academic/classes"));
 app.use("/api/academic", require("./routes/academic/mycourses"));
 app.use("/api/academic", require("./routes/academic/teacherclasses"));
+app.use("/api/academic", require("./routes/academic/studenttimetable"));
 
 
 
