@@ -119,3 +119,5 @@ The server provides various API endpoints to interact with the system. These end
 - **POST** `/api/courses`: Add a new course.
 - **PUT** `/api/courses/:id`: Update course details.
 - **DELETE** `/api/courses/:id`: Delete a course. -->
+
+# Versions 0.9.0
