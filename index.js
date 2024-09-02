@@ -24,6 +24,7 @@ app.use("/api/users", require("./routes/user/userlist"));
 // app.use("/api/logs", require("./routes/logs/logs"));
 app.use("/api/master", require("./routes/main/school"));
 app.use("/api/master", require("./routes/main/department"));
+app.use("/api/master", require("./routes/main/room"));
 app.use("/api/master", require("./routes/main/academicyear"));
 app.use("/api/master", require("./routes/main/semester"));
 app.use("/api/academic", require("./routes/academic/batch"));
