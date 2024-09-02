@@ -4,6 +4,9 @@ const TimetableSchema = new Schema({
   classcode: {
     type: String,
   },
+  teachercode: {
+    type: String,
+  },
   weekcode: {
     type: String,
   },

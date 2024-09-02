@@ -109,7 +109,6 @@ router.post("/studenttimetable", fetchuser, async (req, res) => {
       timetable: studenttimetable,
     });
   } catch (error) {
-    console.log(error);
     return res
       .status(500)
       .json({ msgtype: false, msg: "Internal server error occurred" });
