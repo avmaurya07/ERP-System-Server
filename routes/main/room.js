@@ -9,15 +9,11 @@ const Cordinator = require("../../models/users/Cordinator");
 router.post("/createroom", fetchadmin, async (req, res) => {
   //to create a Department
   try {
-    const dep = await room.findOne({
-      room: req.body.room,
-    });
-    if (dep) {
-      return res
-        .status(400)
-        .json({ msgtype: false, msg: "Room already exist" });
+    if(req.body.room===""){
+        return res
+        .status(500)
+        .json({ msgtype: false, msg: "Room Name cannot be empty" });
     }
-
     const newdep = await room.create({
         departmentname: req.body.departmentname,
       schoolname: req.body.schoolname,
@@ -32,7 +28,6 @@ router.post("/createroom", fetchadmin, async (req, res) => {
       "Main"
     );
   } catch (error) {
-    console.log(error)
     res
       .status(500)
       .json({ msgtype: false, msg: "Internal server error ocurred" });

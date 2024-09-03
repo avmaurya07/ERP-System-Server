@@ -1,12 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const teacheruser = require("../../models/users/TeacherUser");
-const batches = require("../../models/academics/batches");
 const classes = require("../../models/academics/classes");
 const timetable = require("../../models/academics/timetable");
 const fetchteacher = require("../../middleware/fetchteacher");
-const { getWeek, getYear, addWeeks } = require("date-fns");
-const cron = require("node-cron");
 
 
 router.post("/teachertimetable", fetchteacher, async (req, res) => {
@@ -88,7 +85,6 @@ router.post("/teachertimetable", fetchteacher, async (req, res) => {
       timetable: teachertimetable,
     });
   } catch (error) {
-    console.log(error);
     return res
       .status(500)
       .json({ msgtype: false, msg: "Internal server error occurred" });
