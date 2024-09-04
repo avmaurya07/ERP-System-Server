@@ -7,8 +7,10 @@ const fetchteacher = require("../../middleware/fetchteacher");
 const fetchuser = require("../../middleware/fetchuser");
 const router = express.Router();
 const { addlog } = require("../logs/logs");
+const { getWeek, getYear } = require("date-fns");
 const studentuser = require("../../models/users/StudentUser");
 const teacheruser = require("../../models/users/TeacherUser");
+const timetable = require("../../models/academics/timetable"); // Import timetable model
 
 router.post("/createclass", fetchteacher, async (req, res) => {
   //to create a class
@@ -44,6 +46,17 @@ router.post("/createclass", fetchteacher, async (req, res) => {
         teachername:teachername.name,
         teachercode:req.body.teachercode,
       });
+
+      // Create a blank timetable entry
+    const currentDate = new Date();
+    const weekNumber = getWeek(currentDate);
+    const year = getYear(currentDate);
+    const weekcode = `${year}-${weekNumber}`;
+      await timetable.create({
+        weekcode: weekcode,
+        classcode: newdep.classcode,
+      });
+
       return res.json({ msgtype: true, msg: "Class Registered"});
       // addlog(
       //   req.adminuser.id,
@@ -70,6 +83,13 @@ router.post("/createclass", fetchteacher, async (req, res) => {
         teachername:teachername.name,
         teachercode:req.body.teachercode,
       });
+
+      // Create a blank timetable entry
+      await timetable.create({
+        weekcode: req.body.weekcode,
+        classcode: newdep.classcode,
+      });
+
       return res.json({
         msgtype: true,
         msg: "Class Registered"

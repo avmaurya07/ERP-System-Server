@@ -21,17 +21,21 @@ const updateTimetableForNextWeek = async () => {
     const year = getYear(nextWeekDate);
     const weekcode = `${year}-${weekNumber}`;
 
-    // Check if timetable for the next week already exists
-    const existingTimetable = await timetable.findOne({ weekcode });
-    if (!existingTimetable) {
-      // Fetch old timetable
-      const oldWeekcode = `${getYear(currentDate)}-${getWeek(currentDate)}`;
-      const oldTimetableEntries = await timetable.find({
-        weekcode: oldWeekcode,
-      });
+    // Fetch existing timetable entries for the next week
+    const existingTimetableEntries = await timetable.find({ weekcode });
 
-      // Create new timetable entries based on old ones
-      for (const entry of oldTimetableEntries) {
+    // Fetch old timetable
+    const oldWeekcode = `${getYear(currentDate)}-${getWeek(currentDate)}`;
+    const oldTimetableEntries = await timetable.find({ weekcode: oldWeekcode });
+
+    // Create new timetable entries based on old ones
+    for (const entry of oldTimetableEntries) {
+      const classcode = entry.classcode;
+      const entryExists = existingTimetableEntries.some(
+        (existingEntry) => existingEntry.classcode === classcode
+      );
+
+      if (!entryExists) {
         const newEntry = { ...entry.toObject(), weekcode };
         delete newEntry._id; // Remove the old id to create a new document
         await timetable.create(newEntry);
@@ -114,5 +118,7 @@ router.post("/studenttimetable", fetchuser, async (req, res) => {
       .json({ msgtype: false, msg: "Internal server error occurred" });
   }
 });
+
+
 
 module.exports = router;
