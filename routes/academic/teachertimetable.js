@@ -20,6 +20,7 @@ router.post("/teachertimetable", fetchteacher, async (req, res) => {
         batchcode,
         academicyearcode,
         semestercode,
+        teachercode:empid,
       });
       teacherclasses = teacherclasses.concat(courses);
     }
