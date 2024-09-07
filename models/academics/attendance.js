@@ -8,6 +8,12 @@ const AttendenceSchema = new Schema({
   coursecode: {
     type: String,
   },
+  academicyearcode: {
+    type: String,
+  },
+  semestercode: {
+    type: String,
+  },
   students: {
     type: [
       {
@@ -15,7 +21,7 @@ const AttendenceSchema = new Schema({
         week: [
           {
             weekcode: String,
-            attendance: [[Boolean]],
+            attendance: [[String]],
           },
         ],
       },
@@ -27,12 +33,12 @@ const AttendenceSchema = new Schema({
           {
             weekcode: "",
             attendance: [
-              [null, null, null, null, null, null, null, null, null],
-              [null, null, null, null, null, null, null, null, null],
-              [null, null, null, null, null, null, null, null, null],
-              [null, null, null, null, null, null, null, null, null],
-              [null, null, null, null, null, null, null, null, null],
-              [null, null, null, null, null, null, null, null, null]
+              ["", "", "", "", "", "", "", "", ""],
+              ["", "", "", "", "", "", "", "", ""],
+              ["", "", "", "", "", "", "", "", ""],
+              ["", "", "", "", "", "", "", "", ""],
+              ["", "", "", "", "", "", "", "", ""],
+              ["", "", "", "", "", "", "", "", ""]
             ],
           },
         ],

@@ -34,6 +34,7 @@ app.use("/api/academic", require("./routes/academic/teacherclasses"));
 app.use("/api/academic", require("./routes/academic/studenttimetable"));
 app.use("/api/academic", require("./routes/academic/teachertimetable"));
 app.use("/api/academic", require("./routes/academic/cordinatortimetable"));
+app.use("/api/academic", require("./routes/academic/studentattendance"));
 
 
 
