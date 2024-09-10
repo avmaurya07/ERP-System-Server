@@ -1,31 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const studentuser = require("../../models/users/StudentUser");
 const attendance = require("../../models/academics/attendance");
 const fetchuser = require("../../middleware/fetchuser");
 
 router.post("/studentcourseattendance", fetchuser, async (req, res) => {
   try {
-    const { systemid, academicyearcode, semestercode, coursecode,weekcode } = req.body;
+    const { systemid, academicyearcode, semestercode, coursecode, weekcode } = req.body;
 
-    // Fetch attendance data for the student filtered by academicyearcode, semestercode, and coursecode
+    // Fetch attendance data for the student filtered by academicyearcode, semestercode, coursecode, and weekcode
     const attendanceData = await attendance.find({
-      "students.systemid": systemid,
-      "students.week.weekcode": weekcode,
+      systemid: systemid,
       academicyearcode: academicyearcode,
       semestercode: semestercode,
       coursecode: coursecode,
+      weekcode: weekcode,
     });
 
-    // Filter and format the attendance data
+    // Format the attendance data
     const studentAttendance = attendanceData.map((course) => {
-      const student = course.students.find(
-        (student) => student.systemid === systemid
-      );
       return {
         coursename: course.coursename,
         coursecode: course.coursecode,
-        weeks: student.week,
+        attendance: course.attendance,
       };
     });
 

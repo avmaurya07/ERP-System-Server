@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const AttendenceSchema = new Schema({
+const AttendanceSchema = new Schema({
   coursename: {
     type: String,
   },
@@ -14,35 +14,21 @@ const AttendenceSchema = new Schema({
   semestercode: {
     type: String,
   },
-  students: {
-    type: [
-      {
-        systemid: String,
-        week: [
-          {
-            weekcode: String,
-            attendance: [[String]],
-          },
-        ],
-      },
-    ],
+  systemid: {
+    type: String,
+  },
+  weekcode: {
+    type: String,
+  },
+  attendance: {
+    type: [[String]],
     default: [
-      {
-        systemid: "",
-        week: [
-          {
-            weekcode: "",
-            attendance: [
-              ["", "", "", "", "", "", "", "", ""],
-              ["", "", "", "", "", "", "", "", ""],
-              ["", "", "", "", "", "", "", "", ""],
-              ["", "", "", "", "", "", "", "", ""],
-              ["", "", "", "", "", "", "", "", ""],
-              ["", "", "", "", "", "", "", "", ""]
-            ],
-          },
-        ],
-      },
+      ["", "", "", "", "", "", "", "", ""],
+      ["", "", "", "", "", "", "", "", ""],
+      ["", "", "", "", "", "", "", "", ""],
+      ["", "", "", "", "", "", "", "", ""],
+      ["", "", "", "", "", "", "", "", ""],
+      ["", "", "", "", "", "", "", "", ""]
     ],
   },
   date: {
@@ -51,4 +37,4 @@ const AttendenceSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("attendance", AttendenceSchema);
+module.exports = mongoose.model("attendance", AttendanceSchema);

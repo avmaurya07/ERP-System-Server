@@ -5,12 +5,11 @@ const classes = require("../../models/academics/classes");
 const timetable = require("../../models/academics/timetable");
 const fetchteacher = require("../../middleware/fetchteacher");
 
-
 router.post("/teachertimetable", fetchteacher, async (req, res) => {
   try {
     const user = await teacheruser.findById(req.teacheruser.id);
     const empid = user.empid;
-    const teacherbatches = await classes.find({teachercode:empid});
+    const teacherbatches = await classes.find({ teachercode: empid });
     const weekcode = req.body.weekcode;
 
     let teacherclasses = [];
@@ -20,7 +19,7 @@ router.post("/teachertimetable", fetchteacher, async (req, res) => {
         batchcode,
         academicyearcode,
         semestercode,
-        teachercode:empid,
+        teachercode: empid,
       });
       teacherclasses = teacherclasses.concat(courses);
     }
@@ -43,38 +42,54 @@ router.post("/teachertimetable", fetchteacher, async (req, res) => {
     });
 
     // Populate the timetable
-    let timetableEntries =[]
+    let timetableEntries = [];
     for (const course of teacherclasses) {
-        
-      const { batchname, coursecode, coursename, classcode } = course;
-      if (classcode.includes(empid)){
-      timetableEntries = await timetable.find({ classcode, weekcode });}
+      const {
+        batchname,
+        coursecode,
+        coursename,
+        classcode,
+        academicyearcode,
+        semestercode,
+        batchcode,
+      } = course;
+      if (classcode.includes(empid)) {
+        timetableEntries = await timetable.find({ classcode, weekcode });
+      }
       for (const entry of timetableEntries) {
         days.forEach((day) => {
           slots.forEach((slot) => {
             const key = `${day}${slot}`;
             if (entry.schedule[key]) {
-                const RoomNo = entry.roomno[key];
-                
-                // Check if the value already exists at this index
-                const alreadyExists = teachertimetable[key].some(item =>
+              const RoomNo = entry.roomno[key];
+              const markedAttendence = entry.markedAttendence[key];
+
+              // Check if the value already exists at this index
+              const alreadyExists = teachertimetable[key].some(
+                (item) =>
                   item.coursecode === coursecode &&
                   item.coursename === coursename &&
                   item.batchname === batchname &&
-                  item.RoomNo === RoomNo
-                );
-                
-                // Push the value only if it doesn't exist
-                if (!alreadyExists) {
-                  teachertimetable[key].push({
-                    coursecode,
-                    coursename,
-                    batchname,
-                    RoomNo,
-                  });
-                }
+                  item.RoomNo === RoomNo &&
+                  item.markedAttendence === markedAttendence
+              );
+
+              // Push the value only if it doesn't exist
+              if (!alreadyExists) {
+                teachertimetable[key].push({
+                  slot: key, 
+                  coursecode,
+                  coursename,
+                  batchname,
+                  RoomNo,
+                  academicyearcode,
+                  semestercode,
+                  classcode,
+                  batchcode,
+                  markedAttendence,
+                });
               }
-              
+            }
           });
         });
       }
