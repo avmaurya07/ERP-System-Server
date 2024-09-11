@@ -43,11 +43,11 @@ router.post("/takeattendance", fetchteacher, async (req, res) => {
         systemid: student.systemid,
     })));
     
-      const attendanceData1 = students.map(student => {
+      const attendanceData1 = students?.map(student => {
         const attendanceInfo = attendanceData.find(data => data.systemid === student.systemid);
         return {
             ...student,
-            attendance: attendanceInfo.attendance[0][x][y] ? attendanceInfo.attendance[0][x][y] : ""
+            attendance: attendanceInfo?.attendance[0][x][y] ? attendanceInfo?.attendance[0][x][y] : ""
         };
     });
 
